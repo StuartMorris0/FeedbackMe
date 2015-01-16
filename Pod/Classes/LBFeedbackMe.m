@@ -159,7 +159,7 @@ static OpenFeedbackViewBlock _openBlock;
     
     for (NSString *key in allkeys) {
         if ([key isKindOfClass:[NSString class]] &&
-            [key containsString:@"FEEDBACKME_"] &&
+            [self SPMContainsStringWithKey:key] &&
             [key isEqualToString:@"FEEDBACKME_LAST_OPENED_VERSION"] == false &&
             [key isEqualToString:@"FEEDBACKME_NEED_FEEDBACK"] == false) {
                 [keys addObject:key];
@@ -167,6 +167,13 @@ static OpenFeedbackViewBlock _openBlock;
     }
     
     return keys;
+}
+
+// New method for containsString which was only introduced in iOS8 and we need to be backwards compatible for iOS7
++(BOOL)SPMContainsStringWithKey:(NSString *)keyString {
+    NSString *checkString = @"FEEDBACKME_";
+    NSRange range = [keyString rangeOfString:checkString];
+    return range.length != 0;
 }
 
 +(void) clearAllKeys {
